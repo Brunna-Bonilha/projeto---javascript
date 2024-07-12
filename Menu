@@ -1,0 +1,44 @@
+import * as readlineSync from 'readline-sync';
+import { colors } from './util/Colors';
+import { ContaController } from './controllers/ContaControllerController';
+
+function main() {
+  let opcao: number;
+  const produtos: ContaController = new ContaController();
+
+  while (true) {
+    console.log(colors.bg.blackbright, colors.fg.magentastrong,
+      "*****************************************************");
+    console.log("                                                     ");
+    console.log("                Vitrais Bonilha                      ");
+    console.log("                                                     ");
+    console.log("*****************************************************");
+    console.log("                                                     ");
+    console.log("            1 - Listar produtos                      ");
+    console.log("            2 - Fazer pedido                         ");
+    console.log("            3 - Adicionar produto                    ");
+    console.log("            4 - Sair                                 ");
+    console.log("                                                     ", colors.reset);
+
+    opcao = readlineSync.questionInt("Entre com a opção desejada: ");
+
+    switch (opcao) {
+      case 1:
+        produtos.listarProdutos();
+        break;
+      case 2:
+        produtos.fazerPedido();
+        break;
+      case 3:
+        produtos.adicionarProduto();
+        break;
+      case 4:
+        console.log("Saindo...");
+        process.exit(0);
+      default:
+        console.log(colors.fg.magentastrong, "\nOpção Inválida!\n", colors.reset);
+    }
+  }
+}
+
+main();

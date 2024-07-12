@@ -1,0 +1,46 @@
+import * as readlineSync from 'readline-sync';
+import { Produto, ProdutoVidro } from '../model';
+import { Estoque } from '../Controller';
+
+export class ProdutoController {
+  private produtos: Map<Produto, number> = new Map([
+    [new ProdutoVidro('Vidro Temperado', 85.0, 'Transparente'), 10],
+    [new ProdutoVidro('Vidro Laminado', 55.0, 'Fumê'), 5]
+  ]);
+
+  listarProdutos(): void {
+    console.log("\nLista de Produtos:");
+    let index = 1;
+    for (const [produto, quantidade] of this.produtos.entries()) {
+      console.log(`${index}. ${produto.descricao()} - ${quantidade} unidades`);
+      index++;
+    }
+  }
+
+  fazerPedido(): void {
+    this.listarProdutos();
+    const indice = readlineSync.questionInt("Escolha o produto (número): ") - 1;
+    const quantidade = readlineSync.questionInt("Quantidade: ");
+    const produtoArray = Array.from(this.produtos.keys())[indice];
+    const estoqueAtual = this.produtos.get(produtoArray) || 0;
+
+    if (estoqueAtual < quantidade) {
+      throw new Estoque(`Estoque insuficiente para ${produtoArray.nome}`);
+    }
+
+    this.produtos.set(produtoArray, estoqueAtual - quantidade);
+    console.log(`Pedido realizado: ${quantidade}x ${produtoArray.nome}`);
+  }
+
+  adicionarProduto(): void {
+    const nome = readlineSync.question("Nome do Produto: ");
+    const preco = readlineSync.questionFloat("Preço do Produto: ");
+    const tipo = readlineSync.question("Tipo do Produto: ");
+    const quantidade = readlineSync.questionInt("Quantidade em Estoque: ");
+
+    const novoProduto = new ProdutoVidro(nome, preco, tipo);
+    this.produtos.set(novoProduto, quantidade);
+
+    console.log(`Produto ${nome} adicionado com sucesso!`);
+  }
+}

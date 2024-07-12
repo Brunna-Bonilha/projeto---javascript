@@ -1,0 +1,23 @@
+export abstract class Produto {
+    constructor(
+      public nome: string,
+      public preco: number
+    ) {}
+  
+    abstract descricao(): string;
+  }
+  
+  export class ProdutoVidro extends Produto {
+    constructor(
+      nome: string,
+      preco: number,
+      public tipo: string
+    ) {
+      super(nome, preco);
+    }
+  
+    descricao(): string {
+      return `${this.nome} (${this.tipo}) - R$${this.preco.toFixed(2)}`;
+    }
+  }
+  
